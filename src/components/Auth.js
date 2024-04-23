@@ -1,4 +1,5 @@
 import { createContext, useState } from "react";
+import { dataUsers } from '../DataUsers';
 
 export const AuthContext = createContext();
 
@@ -7,31 +8,23 @@ export default function Auth({ children }) {
     const [isAuthenticated, setAuthenticated] = useState(false);
 
 
-    const [hadleLogin, setHadleLogin] = useState({ login: '', pass: '', errorMessage: '' });
-    // FIX: dataPersone get from backend
-    const dataPersone = { login: 'test', pass: 'test' };
-
-    // FIX: namnig for handlers
-    const inputLoginValue = (loginValue) => {
-        setHadleLogin((prevState) => ({
-            ...prevState,
-            login: loginValue.target.value
-        }));
-    };
-    const inputPassValue = (passValue) => {
-        setHadleLogin((prevState) => ({
-            ...prevState,
-            pass: passValue.target.value
-        }));
-    };
+    const [loginData, setLoginData] = useState({ username: '', password: '', errorMessage: '' });
 
 
-    const login = () => {
-        if (hadleLogin.login === dataPersone.login && hadleLogin.pass === dataPersone.pass) {
+    const dataPersone = { username: 'test', password: 'test' };
+
+
+
+
+    const onLoginClick = (values) => {
+        if (values.username === dataPersone.username && values.password === dataPersone.password) {
             setAuthenticated(true);
+            setLoginData((prevState) => ({ 
+                ...prevState, 
+                errorMessage: '' }));
         }
         else {
-            setHadleLogin((prevState) => ({
+            setLoginData((prevState) => ({
                 ...prevState,
                 errorMessage: "Неверный логин или пароль"
             })
@@ -39,12 +32,16 @@ export default function Auth({ children }) {
         }
     };
 
+
+
     const logout = () => {
         setAuthenticated(false);
+        setLoginData({ username: '', pass: '', errorMessage: '' });
     };
 
+
     return (
-        <AuthContext.Provider value={{ isAuthenticated, login, logout, inputLoginValue, inputPassValue }}>
+        <AuthContext.Provider value={{ isAuthenticated, onLoginClick, logout, loginData }}>
             {children}
         </AuthContext.Provider>
     )

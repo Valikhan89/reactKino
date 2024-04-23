@@ -13,6 +13,7 @@ export default function MovieList({  onAddToFavorites, onRemoveFromFavorites, fa
     const oneMovie = movies.find(
         (mov) => mov.id === hadleMovie
     )*/
+    
     return (
         <ContainerPage>
             { movies.map(

@@ -9,9 +9,8 @@ import {  Outlet } from "react-router-dom";
 
 
 
-
 export default function Header({ clickPage }) {
-    const { isAuthenticated, login, logout, inputLoginValue, inputPassValue } = useContext(AuthContext);
+    const { isAuthenticated,  logout,  onLoginClick, loginData  } = useContext(AuthContext);
 
 
     const handleMenuItemClick = (component) => {
@@ -37,9 +36,7 @@ export default function Header({ clickPage }) {
     useEffect(() => {
         setClientReady(true);
     }, []);
-    const onFinish = (values) => {
-        console.log('Finish:', values);
-    };
+
 
 
     return (
@@ -59,9 +56,9 @@ export default function Header({ clickPage }) {
                                 <Button type="primary" onClick={showModal}>
                                     Войти
                                 </Button>
-
+                                {loginData.errorMessage}
                             <Modal title="Авторизация" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-                                <Form form={form} name="normal_login" className="login-form" onFinish={onFinish}>
+                                <Form form={form} name="normal_login" className="login-form" onFinish={onLoginClick}>
                                     <Form.Item
                                         name="username"
                                         rules={[
@@ -71,7 +68,7 @@ export default function Header({ clickPage }) {
                                             },
                                         ]}
                                     >
-                                        <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="test" onChange={inputLoginValue} />
+                                        <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="test" />
                                     </Form.Item>
                                     <Form.Item
                                         name="password"
@@ -85,7 +82,7 @@ export default function Header({ clickPage }) {
                                         <Input
                                             prefix={<LockOutlined className="site-form-item-icon" />}
                                             type="password"
-                                            placeholder="test" onChange={inputPassValue}
+                                            placeholder="test"
                                         />
                                     </Form.Item>
                                     <Form.Item shouldUpdate>
@@ -98,7 +95,7 @@ export default function Header({ clickPage }) {
                                                     !form.isFieldsTouched(true) ||
                                                     !!form.getFieldsError().filter(({ errors }) => errors.length).length
                                                 }
-                                                onClick={() => { setIsModalOpen(false); login() }}
+                                                onClick={() => { setIsModalOpen(false);  }}
                                             >
                                                 Войти
                                             </Button>
