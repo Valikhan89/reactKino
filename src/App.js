@@ -2,14 +2,20 @@ import './App.css';
 import './components/Style.css';
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, context } from 'react';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from "./firebase"
 import Auth from './components/Auth';
 import MovieProvider from './components/MovieContext';
 import Header from './components/Header';
+import Loader from './components/auth/Loader';
 import MovieList from './pages/MovieList';
 import MoviePage from './pages/MoviePage';
 import Favorites from './pages/Favorites';
 import { data } from './Data';
+
+
+
 
 function App() {
 
@@ -53,6 +59,16 @@ function App() {
     // Логика удаления фильма из избранного
     setFavoriteMovies((prevFavorites) => prevFavorites.filter((id) => id !== movieId));
   };
+
+
+
+  //Показ прелоадера
+  const [user, loading] = useAuthState(auth);
+  if (loading) {
+    return <Loader />;
+  }
+
+
 
   return (
     <BrowserRouter>

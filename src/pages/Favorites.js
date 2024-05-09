@@ -6,7 +6,7 @@ import { useContext, useState } from 'react';
 import { MovieContext } from '../components/MovieContext';
 
 
-export default function Favorites({  onAddToFavorites, onRemoveFromFavorites, favoriteMovies }) {
+export default function Favorites({ onAddToFavorites, onRemoveFromFavorites, favoriteMovies }) {
     const { isAuthenticated } = useContext(AuthContext);
 
     const { movies } = useContext(MovieContext);

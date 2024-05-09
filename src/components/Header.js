@@ -1,16 +1,19 @@
 import App from "../App";
 import ContainerPage from './ContainerPage';
 import Menu from './Menu';
-import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Modal, Button, Form, Input, Space } from 'antd';
+import { Modal, Button, Tabs } from 'antd';
 import { useState, useContext, useEffect } from "react";
 import { AuthContext } from './Auth';
-import {  Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+import SignUp from "./auth/SignUp"
+import SignIn from "./auth/SignIn"
+import AuthDetails from "./auth/AuthDetails";
+
 
 
 
 export default function Header({ clickPage }) {
-    const { isAuthenticated,  logout,  onLoginClick, loginData  } = useContext(AuthContext);
+    const { isAuthenticated, logout, loginData } = useContext(AuthContext);
 
 
     const handleMenuItemClick = (component) => {
@@ -29,94 +32,56 @@ export default function Header({ clickPage }) {
         setIsModalOpen(false);
     };
 
-    //Form
-    const [form] = Form.useForm();
-    const [clientReady, setClientReady] = useState(false);
-    // To disable submit button at the beginning.
-    useEffect(() => {
-        setClientReady(true);
-    }, []);
-
-
 
     return (
-    <>
-        <header className="shadow">
-            <nav className="navbar">
-                <ContainerPage>
-                    <a className=" navbar-brand" href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Netflix_2015_logo.svg/320px-Netflix_2015_logo.svg.png" alt="Netflix" /></a>
-                
+        <>
+            <header className="shadow">
+                <nav className="navbar">
+                    <ContainerPage>
+                        <a className=" navbar-brand" href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Netflix_2015_logo.svg/320px-Netflix_2015_logo.svg.png" alt="Netflix" /></a>
 
-                    <Menu/>
 
-                    {isAuthenticated ? (
-                        <button onClick={logout}>Выйти</button>
-                    ) : (
-                        <>                     
+                        <Menu />
+
+                        {!isAuthenticated && (
+                            <>
                                 <Button type="primary" onClick={showModal}>
                                     Войти
                                 </Button>
-                                {loginData.errorMessage}
-                            <Modal title="Авторизация" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-                                <Form form={form} name="normal_login" className="login-form" onFinish={onLoginClick}>
-                                    <Form.Item
-                                        name="username"
-                                        rules={[
+                                <Modal title="Авторизация" open={isModalOpen} onOk={handleOk} onCancel={handleCancel} footer={null}>
+                                    <Tabs
+                                        defaultActiveKey="1"
+                                        centered
+                                        items={[
                                             {
-                                                required: true,
-                                                message: 'Введите ваш логин!',
+                                                label: 'Войти',
+                                                key: '1',
+                                                children:  <SignIn />,
+                                            },
+                                            {
+                                                label: 'Регистрация',
+                                                key: '2',
+                                                children:  <SignUp />,
                                             },
                                         ]}
-                                    >
-                                        <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="test" />
-                                    </Form.Item>
-                                    <Form.Item
-                                        name="password"
-                                        rules={[
-                                            {
-                                                required: true,
-                                                message: 'Введите ваш пароль!',
-                                            },
-                                        ]}
-                                    >
-                                        <Input
-                                            prefix={<LockOutlined className="site-form-item-icon" />}
-                                            type="password"
-                                            placeholder="test"
-                                        />
-                                    </Form.Item>
-                                    <Form.Item shouldUpdate>
-                                        {() => (
-                                            <Button
-                                                type="primary"
-                                                htmlType="submit"
-                                                disabled={
-                                                    !clientReady ||
-                                                    !form.isFieldsTouched(true) ||
-                                                    !!form.getFieldsError().filter(({ errors }) => errors.length).length
-                                                }
-                                                onClick={() => { setIsModalOpen(false);  }}
-                                            >
-                                                Войти
-                                            </Button>
-                                        )}
-                                    </Form.Item>
-                                </Form>
-                                <p>{isAuthenticated ? 'Вы вошли в систему.' : 'Вы не вошли в систему.'}</p>
-                            </Modal>
+                                    />
 
-                        </>
-                    )}
-                    <p>{isAuthenticated && 'Вы вошли!'}</p>
+                                    <p>{isAuthenticated ? 'Вы вошли в систему.' : 'Вы не вошли в систему.'}</p>
+                                </Modal>
+
+                            </>
+                        )}
 
 
-                </ContainerPage>
-            </nav>
-        </header>
-        
-        <div>
-        <Outlet />
-        </div>
+                        <AuthDetails />
+
+                    </ContainerPage>
+                </nav>
+            </header>
+
+            <ContainerPage>
+                <Outlet />
+            </ContainerPage>
         </>
     )
 }

@@ -1,16 +1,39 @@
-import { createContext, useState } from "react";
-import { dataUsers } from '../DataUsers';
+import {  onAuthStateChanged } from "firebase/auth";
+import {auth} from "../firebase"
+
+import { createContext, useState, useEffect } from "react";
+
+
 
 export const AuthContext = createContext();
 
 export default function Auth({ children }) {
 
+
+
+    const [isAuthenticated, setAuthenticated] = useState(null);
+    useEffect(() => {
+        const listen = onAuthStateChanged(auth, (user) => {
+            if (user) {
+                setAuthenticated(user);
+            } else {
+                setAuthenticated(null);
+            }
+        });
+        return () => {
+            listen();
+        }
+    }, []);
+
+    const onLoginClick=0;
+    const logout =0;
+    const loginData =0;
+
+
+/*
+
     const [isAuthenticated, setAuthenticated] = useState(false);
-
-
     const [loginData, setLoginData] = useState({ username: '', password: '', errorMessage: '' });
-
-
     const dataPersone = { username: 'test', password: 'test' };
 
 
@@ -19,9 +42,10 @@ export default function Auth({ children }) {
     const onLoginClick = (values) => {
         if (values.username === dataPersone.username && values.password === dataPersone.password) {
             setAuthenticated(true);
-            setLoginData((prevState) => ({ 
-                ...prevState, 
-                errorMessage: '' }));
+            setLoginData((prevState) => ({
+                ...prevState,
+                errorMessage: ''
+            }));
         }
         else {
             setLoginData((prevState) => ({
@@ -38,6 +62,8 @@ export default function Auth({ children }) {
         setAuthenticated(false);
         setLoginData({ username: '', pass: '', errorMessage: '' });
     };
+*/
+
 
 
     return (
