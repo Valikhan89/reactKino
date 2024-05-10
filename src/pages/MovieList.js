@@ -1,18 +1,21 @@
-
 import MovieCard from '../components/MovieCard';
-import { useState, useContext } from 'react';
-import { MovieContext } from '../components/MovieContext';
+import { useState, useEffect } from 'react';
+import { collection, query, onSnapshot } from 'firebase/firestore';
+import { db } from '../firebase'; 
 
-export default function MovieList({ onAddToFavorites, onRemoveFromFavorites, favoriteMovies }) {
 
-    const { movies } = useContext(MovieContext);
+export default function MoviesList() {
+    const [movies, setMovies] = useState([]);
 
-    // FIX: isMovieSelected, selectedMovie
-    /*   const [hadleMovie, setHadleMovie] = useState();
-   
-       const oneMovie = movies.find(
-           (mov) => mov.id === hadleMovie
-       )*/
+    useEffect(() => {
+        const q = query(collection(db, 'movies'));
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+            const moviesData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            setMovies(moviesData);
+        });
+
+        return () => unsubscribe();
+    }, []);
 
     return (
         <>
@@ -21,5 +24,5 @@ export default function MovieList({ onAddToFavorites, onRemoveFromFavorites, fav
             )
             }
         </>
-    )
+    );
 }

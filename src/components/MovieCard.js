@@ -4,10 +4,7 @@ import { Link, Outlet } from "react-router-dom";
 
 export default function MovieCard({ id, image, title }) {
 
-    /*   const handleClickMovie = () => {
-           onButtonClick(id);
-       };
-   */
+  
     return (
         <>
             <Col span={24} md={4} >

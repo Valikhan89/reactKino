@@ -22,10 +22,10 @@ export default function AuthDetails() {
             .catch((e) => console.log(e));
     }
     return (
-        <div>
+        <>
             {authUser && (
-                <div>{`Вы вошли как ${authUser.email}`} <button onClick={userSignOut}>Выйти</button></div>
+                <div>{`Ваш логин: ${authUser.email}`} <button onClick={userSignOut}>Выйти</button></div>
             ) }
-        </div>
+        </>
     )
 }

@@ -1,41 +1,70 @@
+import { useState, useEffect, useContext } from 'react';
+import { collection, query, where, getDocs, getDoc, doc } from 'firebase/firestore';
+import { db } from '../firebase';
+import { Col } from 'antd';
 import { AuthContext } from '../components/Auth';
 import ContainerPage from '../components/ContainerPage';
 import MovieCard from '../components/MovieCard';
-import MoviePage from './MoviePage';
-import { useContext, useState } from 'react';
-import { MovieContext } from '../components/MovieContext';
+import Loader from '../components/auth/Loader';
+
+export default function FavoritesList() {
+    const { user } = useContext(AuthContext);
+    const [favorites, setFavorites] = useState([]);
+    const [loading, setLoading] = useState(false);
+
+    useEffect(() => {
+        if (!user) return;
+
+        const fetchFavorites = async () => {
+            setLoading(true);
+            try {
+                // Создание запроса к коллекции избранных, фильтруя по userId
+                const q = query(collection(db, 'favorites'), where('userId', '==', user.uid));
+                const querySnapshot = await getDocs(q);
+                const movieIds = querySnapshot.docs.map(doc => doc.data().movieId);
+
+                // Получение дополнительных данных о фильмах
+                const movies = await Promise.all(
+                    movieIds.map(movieId =>
+                        getDoc(doc(db, 'movies', movieId))  
+                    )
+                );
+
+                // Устанавливаем данные фильмов
+                setFavorites(movies.filter(doc => doc.exists()).map(doc => ({ id: doc.id, ...doc.data() })));
 
 
-export default function Favorites({ onAddToFavorites, onRemoveFromFavorites, favoriteMovies }) {
-    const { isAuthenticated } = useContext(AuthContext);
+            } catch (error) {
+                console.error('Ошибка при загрузке избранных:', error);
+            }
+            setLoading(false);
+        };
 
-    const { movies } = useContext(MovieContext);
+        fetchFavorites();
+    }, [user]);
 
-    const [hadleMovie, setHadleMovie] = useState();
 
-    const favoriteMoviesData = movies.filter((movie) => favoriteMovies.includes(movie.id));
+    if (!user) {
+        return <div>Пожалуйста, войдите в систему для просмотра избранных фильмов.</div>;
+    }
 
-    const oneMovie = movies.find(
-        (mov) => mov.id === hadleMovie
-    )
+    if (loading) {
+        return <Loader />;
+    }
+
     return (
         <ContainerPage>
-            {isAuthenticated ? (
-                <>
-                    {hadleMovie ? (
-                        <MoviePage dataMovie={oneMovie} onAddToFavorites={onAddToFavorites} onRemoveFromFavorites={onRemoveFromFavorites} favoriteMovies={favoriteMovies} />
-                    ) :
-                        (
-                            favoriteMoviesData.map(
-                                (movie) => <MovieCard key={movie.id} {...movie} onButtonClick={() => setHadleMovie(movie.id)} />
-                            )
-                        )
-                    }
-                </>
+            <Col span={24}><h2>Избранные Фильмы</h2></Col>
+
+            {favorites.length > 0 ? (
+                favorites.map(
+                    (movie) => <MovieCard key={movie.id} {...movie} />
+                )
+
             ) : (
-                <div>Вы не вошли на сайт</div>
-            )
-            }
+                <p>Избранные фильмы отсутствуют.</p>
+            )}
+
         </ContainerPage>
-    )
+    );
 }

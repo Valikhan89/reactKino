@@ -25,11 +25,6 @@ export default function SignIn() {
 
     //Form
     const [form] = Form.useForm();
-    const [clientReady, setClientReady] = useState(false);
-    // To disable submit button at the beginning.
-    useEffect(() => {
-        setClientReady(true);
-    }, []);
 
 
 

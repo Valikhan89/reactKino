@@ -1,7 +1,6 @@
-import App from "../App";
 import ContainerPage from './ContainerPage';
 import Menu from './Menu';
-import { Modal, Button, Tabs } from 'antd';
+import { Modal, Button, Tabs, Col } from 'antd';
 import { useState, useContext, useEffect } from "react";
 import { AuthContext } from './Auth';
 import { Outlet } from "react-router-dom";
@@ -13,7 +12,7 @@ import AuthDetails from "./auth/AuthDetails";
 
 
 export default function Header({ clickPage }) {
-    const { isAuthenticated, logout, loginData } = useContext(AuthContext);
+    const { isAuthenticated } = useContext(AuthContext);
 
 
     const handleMenuItemClick = (component) => {
@@ -38,13 +37,11 @@ export default function Header({ clickPage }) {
             <header className="shadow">
                 <nav className="navbar">
                     <ContainerPage>
-                        <a className=" navbar-brand" href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Netflix_2015_logo.svg/320px-Netflix_2015_logo.svg.png" alt="Netflix" /></a>
-
-
-                        <Menu />
-
-                        {!isAuthenticated && (
-                            <>
+                        <Col span={24} md={4}>
+                            <a className=" navbar-brand" href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Netflix_2015_logo.svg/320px-Netflix_2015_logo.svg.png" alt="Netflix" /></a></Col>
+                        <Col span={24} md={14} > <Menu /></Col>
+                        <Col span={24}  md={6}> {!isAuthenticated && (
+                            <div className="headButton">
                                 <Button type="primary" onClick={showModal}>
                                     Войти
                                 </Button>
@@ -56,25 +53,23 @@ export default function Header({ clickPage }) {
                                             {
                                                 label: 'Войти',
                                                 key: '1',
-                                                children:  <SignIn />,
+                                                children: <SignIn />,
                                             },
                                             {
                                                 label: 'Регистрация',
                                                 key: '2',
-                                                children:  <SignUp />,
+                                                children: <SignUp />,
                                             },
                                         ]}
                                     />
 
-                                    <p>{isAuthenticated ? 'Вы вошли в систему.' : 'Вы не вошли в систему.'}</p>
+                                    <p>{isAuthenticated && 'Вы вошли в систему.'}</p>
                                 </Modal>
 
-                            </>
+                            </div>
                         )}
 
-
-                        <AuthDetails />
-
+                            <AuthDetails /></Col>
                     </ContainerPage>
                 </nav>
             </header>

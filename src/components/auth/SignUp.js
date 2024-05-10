@@ -36,28 +36,6 @@ export default function SignUp() {
     }, []);
 
 
-
-    /*
-   <form onSubmit={register}>
-                <input
-                    value={email}
-                    type="email"
-                    onChange={(e) => setEmail(e.target.value)} />
-                <input
-                    value={password}
-                    type="password"
-                    onChange={(e) => setPassword(e.target.value)} />
-                <input
-                    value={copyPassword}
-                    type="password"
-                    onChange={(e) => setCopyPassword(e.target.value)} />
-                <button>Создать</button>
-                {error ? <p>{error}</p> : ""}
-            </form>
-
-
-    */
-
     return (
         <div>
             <Form form={formReg} name="normal_login" className="login-form" onFinish={register}>
@@ -112,7 +90,7 @@ export default function SignUp() {
 
                 <Form.Item>
                     <Button type="primary" htmlType="submit" disabled={!clientReady}>
-                        Войти
+                        Регистрация
                     </Button>
                 </Form.Item>
 

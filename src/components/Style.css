@@ -71,7 +71,9 @@ ul.navbar-nav li a {
 	opacity: 1;
 	transition: all .2s ease-in-out;
 }
-
+.headButton{
+	text-align:end;
+}
 .shadow {
 	box-shadow: 0 0 5px rgba(0, 0, 0, .3) !important;
 }
@@ -134,5 +136,8 @@ ul.navbar-nav li a {
 	.container {
 		width: 94%;
 		margin: .6rem;
+	}
+	.navbar-brand img {
+		width: 100%;
 	}
 }
