@@ -29,45 +29,6 @@ export default function Auth({ children }) {
         }
     }, []);
 
-    const onLoginClick = 0;
-    const logout = 0;
-    const loginData = 0;
-
-
-    /*
-    
-        const [isAuthenticated, setAuthenticated] = useState(false);
-        const [loginData, setLoginData] = useState({ username: '', password: '', errorMessage: '' });
-        const dataPersone = { username: 'test', password: 'test' };
-    
-    
-    
-    
-        const onLoginClick = (values) => {
-            if (values.username === dataPersone.username && values.password === dataPersone.password) {
-                setAuthenticated(true);
-                setLoginData((prevState) => ({
-                    ...prevState,
-                    errorMessage: ''
-                }));
-            }
-            else {
-                setLoginData((prevState) => ({
-                    ...prevState,
-                    errorMessage: "Неверный логин или пароль"
-                })
-                )
-            }
-        };
-    
-    
-    
-        const logout = () => {
-            setAuthenticated(false);
-            setLoginData({ username: '', pass: '', errorMessage: '' });
-        };
-    */
-
 
 
     return (
